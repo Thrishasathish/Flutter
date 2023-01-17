@@ -1,3 +1,5 @@
+import 'dart:ui';
+import 'package:bems/forgotpsd.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/material/colors.dart';
@@ -88,16 +90,114 @@ class _LoginScreensState extends State<LoginScreens> {
   }
 
   Widget buildForgetpass() {
+    
     return Container(
       alignment: Alignment.centerRight,
       child: TextButton(
-          onPressed: () => print(''),
-          child: Text(
-            'Forget Password?',
-            style: TextStyle(color: Color.fromARGB(255, 4, 4, 4)),
-          )),
-    );
+              child: Text("Forgot password"),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return BackdropFilter(filter:ImageFilter.blur(sigmaX: 6,sigmaY: 6),
+                          child: AlertDialog(
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                  BorderRadius.all(Radius.circular(20))),
+                              title: const Text(
+                                "OTP",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              actions: [
+                                Container(
+                                    padding: EdgeInsets.all(30),
+                                    decoration: BoxDecoration(
+
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Column(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                            children: const [
+                                              _textFieldOTP(
+                                                  first: true, last: false),
+                                              _textFieldOTP(
+                                                  first: false, last: false),
+                                              _textFieldOTP(
+                                                  first: false, last: false),
+                                              _textFieldOTP(
+                                                  first: false, last: true),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 20,
+                                          ),
+
+                                         
+                                             GestureDetector(
+                    onTap: () {Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const psd()));},
+                    child: Container(
+                      width: 80,
+                      height: 35,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: Color(0xff12734C),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "SUBMIT",
+                          style:TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  
+                  
+                
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                              children: [
+                                                const Text(
+                                                  "Didn’t receive OTP ?",
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {},
+                                                   style: TextButton.styleFrom(
+    foregroundColor: Color(0xff12734C),
+  ),
+                                                  child: const Text("Resend OTP",),
+                                                  
+                                                ),
+                                              ])
+                                        ]))
+                              ]));
+                    });
+              }));
+    
   }
+  
 
   Widget buildRememberme() {
     return Container(
@@ -208,5 +308,52 @@ class _LoginScreensState extends State<LoginScreens> {
                 ],
               )),
         ));
+  }
+}
+class _textFieldOTP extends StatelessWidget {
+  final bool first;
+  final bool last;
+  const _textFieldOTP({super.key, required this.first, required this.last});
+
+  @override
+  Widget build(BuildContext context) {
+    var container = Container(
+      
+      height: 60,
+      width: 45,
+      
+      child: AspectRatio(
+        aspectRatio: 1.0,
+        child: TextField(
+          autofocus: true,
+          onChanged: (value) {
+            if (value.length == 1 && last == false) {
+              FocusScope.of(context).nextFocus();
+            }
+            if (value.length == 0 && first == false) {
+              FocusScope.of(context).previousFocus();
+            }
+          },
+          showCursor: false,
+          readOnly: false,
+          textAlign: TextAlign.center,
+          
+          style: TextStyle(fontSize: 20,),
+          keyboardType: TextInputType.number,
+          maxLength: 1,
+          decoration: InputDecoration(
+            counter: Offstage(),
+            enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.black38),
+                borderRadius: BorderRadius.circular(10)),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0Xff12734C)),
+                borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+      ),
+    );
+    return container;
+
   }
 }
